@@ -4,13 +4,14 @@ namespace Classes;
 
 use Classes\Pieces\Bomb;
 use Classes\Pieces\Field;
+use Classes\Pieces\Limit;
 use Classes\Pieces\Piece;
 use Classes\Pieces\Queen;
 
 class Chessboard
 {
-    private $dimensions;
-    private $board;
+    public $dimensions;
+    public $board;
     private $bombsCount;
 
     public function makeBoard($filename)
@@ -20,7 +21,7 @@ class Chessboard
         // First line (Board and bombs)
         $line = fgets($file);
         $data = explode(' ', $line);
-        $this->dimensions = (int) $data[0];
+        $this->dimensions = ((int) $data[0]) + 1;
         $this->bombsCount = (int) $data[1];
         $this->makeEmptyBoard();
 
@@ -42,11 +43,15 @@ class Chessboard
 
     private function makeEmptyBoard()
     {
-        for($i = 0; $i < $this->dimensions; $i++) {
+        for($i = 0; $i <= $this->dimensions; $i++) {
             $this->board[$i] = [];
 
-            for($j = 0; $j < $this->dimensions; $j++) {
-                $this->board[$i][] = new Field();
+            for($j = 0; $j <= $this->dimensions; $j++) {
+                if (($i > 0 && $i < $this->dimensions) && ($j > 0 && $j < $this->dimensions)) {
+                    $this->board[$i][] = new Field();
+                } else {
+                    $this->board[$i][] = new Limit();
+                }
             }
         }
     }
@@ -58,7 +63,12 @@ class Chessboard
      */
     public function putPiece(Piece $piece, int $x, int $y)
     {
-        $this->board[$x-1][$y-1] = $piece;
+        $this->board[$x][$y] = $piece;
+        $piece->setCoordinates($x, $y);
+
+        if ($piece instanceof Queen) {
+            $piece->move($this);
+        }
     }
 
     /**
@@ -70,7 +80,7 @@ class Chessboard
         foreach ($this->board as $row) {
             $print .= '|';
             foreach ($row as $piece) {
-                $print .= $piece->getSymbol() . '|';
+                $print .= $piece->symbol . '|';
             }
             $print .= "\n";
         }
@@ -79,11 +89,20 @@ class Chessboard
         echo $print;
     }
 
+    public function getCell(int $x, int $y)
+    {
+        if ($x < 0 || $x > $this->dimensions || $y < 0 || $y > $this->dimensions) {
+            return new Limit();
+        }
+
+        return $this->board[$x][$y];
+    }
+
     /**
      * @return string
      */
     private function lineStr()
     {
-        return '---'.str_pad('', ($this->dimensions-1)*2, '--');
+        return '---'.str_pad('', $this->dimensions*2, '--');
     }
 }
