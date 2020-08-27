@@ -13,8 +13,6 @@ class Queen extends Piece
         $dimensions = $chessboard->dimensions - 1;
 
         for ($i = 1; $i < $dimensions; $i++) {
-            echo "i = " . $i . "\n";
-            echo "dimensions = " . $dimensions . "\n";
             // Top
             if ($chessboard->getCell($this->x + $i, $this->y) instanceof Field) {
                 $chessboard->putPiece(new Path(), $this->x + $i, $this->y);
