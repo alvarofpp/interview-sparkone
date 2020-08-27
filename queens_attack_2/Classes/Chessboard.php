@@ -65,15 +65,16 @@ class Chessboard
     /**
      * @param Piece $piece
      * @param int $x
-     * @param Int $y
+     * @param int $y
+     * @return bool
      */
     public function putPiece(Piece $piece, int $x, int $y)
     {
         if ($x < 0 || $x > $this->dimensions
             || $y < 0 || $y > $this->dimensions) {
-            return null;
+            return false;
         } elseif (!($this->board[$x][$y] instanceof Path || $this->board[$x][$y] instanceof Field)) {
-            return null;
+            return false;
         }
 
         $this->board[$x][$y] = $piece;
@@ -85,6 +86,8 @@ class Chessboard
         } elseif ($piece instanceof Bomb) {
             $piece->clearPaths($this, $this->cellsFilled['queen']);
         }
+
+        return true;
     }
 
     /**
