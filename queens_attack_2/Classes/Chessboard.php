@@ -9,16 +9,41 @@ use Classes\Pieces\Path;
 use Classes\Pieces\Piece;
 use Classes\Pieces\Queen;
 
+/**
+ * Class Chessboard
+ * Class representing chessboard.
+ * @package Classes
+ */
 class Chessboard
 {
+    /**
+     * Dimensions of the board.
+     * @var int
+     */
     public $dimensions;
+    /**
+     * Chessboard.
+     * @var [][] of Piece
+     */
     public $board;
+    /**
+     * Amount of bombs on the tray.
+     * @var int
+     */
     private $bombsCount;
+    /**
+     * Saving objects in memory.
+     * @var array
+     */
     private $memory = [
         'queen' => null,
         'paths' => [],
     ];
 
+    /**
+     * Make the board.
+     * @param $filename
+     */
     public function makeBoard($filename)
     {
         $file = fopen($filename, "r");
@@ -46,6 +71,9 @@ class Chessboard
         fclose($file);
     }
 
+    /**
+     * Make a empty board.
+     */
     private function makeEmptyBoard()
     {
         for ($i = 0; $i <= $this->dimensions; $i++) {
@@ -62,6 +90,7 @@ class Chessboard
     }
 
     /**
+     * Adds a piece to the board.
      * @param Piece $piece
      * @param int $x
      * @param int $y
@@ -96,22 +125,11 @@ class Chessboard
     }
 
     /**
-     *
+     * Take a cell from the board.
+     * @param int $x
+     * @param int $y
+     * @return Limit|mixed
      */
-    public function print()
-    {
-        $print = '';
-        foreach ($this->board as $row) {
-            $print .= '|';
-            foreach ($row as $piece) {
-                $print .= $piece->symbol . '|';
-            }
-            $print .= "\n";
-        }
-
-        echo $print;
-    }
-
     public function getCell(int $x, int $y)
     {
         if ($x < 0 || $x > $this->dimensions || $y < 0 || $y > $this->dimensions) {
@@ -121,6 +139,11 @@ class Chessboard
         return $this->board[$x][$y];
     }
 
+    /**
+     * Clears the available path for the queen on the board.
+     * @param int $x
+     * @param int $y
+     */
     public function clearPath(int $x, int $y)
     {
         foreach ($this->memory['paths'] as $key => $path) {
@@ -131,6 +154,10 @@ class Chessboard
         }
     }
 
+    /**
+     * Counts the number of paths available to the queen on the board.
+     * @return int
+     */
     public function countPaths()
     {
         return count($this->memory['paths']);

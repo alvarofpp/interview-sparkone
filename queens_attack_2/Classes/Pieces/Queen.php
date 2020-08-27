@@ -4,10 +4,23 @@ namespace Classes\Pieces;
 
 use Classes\Chessboard;
 
+/**
+ * Class Queen
+ * This class represents the queen.
+ * @package Classes\Pieces
+ */
 class Queen extends Piece
 {
+    /**
+     * Symbol of the piece.
+     * @var string
+     */
     public $symbol = 'q';
 
+    /**
+     * Queen's moves.
+     * @param Chessboard $chessboard
+     */
     public function move(Chessboard &$chessboard)
     {
         $dimensions = $chessboard->dimensions - 1;

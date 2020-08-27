@@ -7,6 +7,7 @@ spl_autoload_register(function ($class) {
 use Classes\Chessboard;
 
 $chessboard = new Chessboard();
-$chessboard->makeBoard('inputs/input_02.txt');
-$chessboard->print();
+// Place the input file path here
+$chessboard->makeBoard('inputs/input_01.txt');
+
 echo $chessboard->countPaths()."\n";

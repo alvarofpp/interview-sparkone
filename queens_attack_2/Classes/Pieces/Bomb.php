@@ -4,11 +4,25 @@ namespace Classes\Pieces;
 
 use Classes\Chessboard;
 
+/**
+ * Class Bomb
+ * This class represents a bomb on the board.
+ * @package Classes\Pieces
+ */
 class Bomb extends Piece
 {
+    /**
+     * Symbol of the piece.
+     * @var string
+     */
     public $symbol = 'x';
 
-    public function clearPaths(Chessboard &$chessboard, Queen $queen)
+    /**
+     * Erase so many paths for the queen.
+     * @param Chessboard $chessboard
+     * @param Queen $queen
+     */
+    public function clearPaths(Chessboard $chessboard, Queen $queen)
     {
         $diffs = [
             'x' => $this->x - $queen->x,
