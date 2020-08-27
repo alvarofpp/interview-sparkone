@@ -38,7 +38,7 @@ class Bomb extends Piece
             }
         } elseif ($diffs['x'] == 0 && $diffs['y'] < 0) {
             // Left
-            for ($j = $this->y; $j > 0; $j--) {
+            for ($j = $this->y - 1; $j > 0; $j--) {
                 if (!$chessboard->putPiece(new Field(), $this->x, $j)) {
                     break;
                 }
