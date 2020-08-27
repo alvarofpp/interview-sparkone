@@ -92,7 +92,7 @@ class Chessboard
      */
     public function print()
     {
-        $print = $this->lineStr() . "\n";
+        $print = '';
         foreach ($this->board as $row) {
             $print .= '|';
             foreach ($row as $piece) {
@@ -100,7 +100,6 @@ class Chessboard
             }
             $print .= "\n";
         }
-        $print .= $this->lineStr() . "\n";
 
         echo $print;
     }
