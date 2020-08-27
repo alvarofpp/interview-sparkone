@@ -14,8 +14,7 @@ class Chessboard
     public $dimensions;
     public $board;
     private $bombsCount;
-    private $cellsFilled = [
-        'bombs' => [],
+    private $memory = [
         'queen' => null,
         'paths' => [],
     ];
@@ -77,14 +76,20 @@ class Chessboard
             return false;
         }
 
+        if ($this->board[$x][$y] instanceof Path) {
+            $this->clearPath($x, $y);
+        }
+
         $this->board[$x][$y] = $piece;
         $piece->setCoordinates($x, $y);
 
         if ($piece instanceof Queen) {
             $piece->move($this);
-            $this->cellsFilled['queen'] = $piece;
+            $this->memory['queen'] = $piece;
         } elseif ($piece instanceof Bomb) {
-            $piece->clearPaths($this, $this->cellsFilled['queen']);
+            $piece->clearPaths($this, $this->memory['queen']);
+        } elseif ($piece instanceof Path) {
+            $this->memory['paths'][] = $piece;
         }
 
         return true;
@@ -116,11 +121,18 @@ class Chessboard
         return $this->board[$x][$y];
     }
 
-    /**
-     * @return string
-     */
-    private function lineStr()
+    public function clearPath(int $x, int $y)
     {
-        return '---' . str_pad('', $this->dimensions * 2, '--');
+        foreach ($this->memory['paths'] as $key => $path) {
+            if ($path->x == $x && $path->y == $y) {
+                unset($this->memory['paths'][$key]);
+                break;
+            }
+        }
+    }
+
+    public function countPaths()
+    {
+        return count($this->memory['paths']);
     }
 }

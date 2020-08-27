@@ -7,8 +7,8 @@ use Classes\Chessboard;
 abstract class Piece
 {
     public $symbol;
-    protected $x;
-    protected $y;
+    public $x;
+    public $y;
 
     public function move(Chessboard &$chessboard)
     {
